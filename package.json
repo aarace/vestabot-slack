@@ -1,0 +1,14 @@
+{
+  "name": "vestabot-slack",
+  "version": "1.0.0",
+  "description": "Slack app that posts messages to a Vestaboard",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@slack/bolt": "^3.21.1",
+    "dotenv": "^16.4.7"
+  }
+}
