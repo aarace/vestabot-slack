@@ -67,6 +67,7 @@ app.command('/vesta', async ({ command, ack, respond }) => {
       response_type: 'in_channel',
       text: `📋 *${command.user_name}* posted to the Vestaboard: _${message}_`,
     });
+    console.log(`${command.user_name} posted to Vestaboard: ${message}`);
   } catch (err) {
     console.error('Vestaboard error:', err);
     await respond({
