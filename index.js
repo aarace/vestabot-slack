@@ -37,7 +37,7 @@ app.command('/vesta', async ({ command, ack, respond }) => {
   await ack();
 
   const userId = command.user_id;
-  const message = `${command.user_name}: ${command.text?.trim()}`;
+  const message = `${command.text?.trim()}`;
 
   if (!message) {
     await respond({
