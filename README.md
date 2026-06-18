@@ -1,6 +1,9 @@
 # Vestabot (Slack)
 
-A Slack app that lets anyone in your workspace post messages to a Vestaboard using the `/vesta` slash command. Each user is limited to one post per minute.
+A Slack app that lets anyone in your workspace post to a Vestaboard. Supports two slash commands:
+
+- `/vesta [message]` — post any text to the Vestaboard (rate-limited to once per minute per user)
+- `/tides` — post today's high and low tide times for Cohasset Harbor to the Vestaboard
 
 ## Prerequisites
 
@@ -15,11 +18,14 @@ A Slack app that lets anyone in your workspace post messages to a Vestaboard usi
 2. **Enable Socket Mode** (Settings → Socket Mode → Enable). This avoids needing a public URL.
    - Generate an **App-Level Token** with the `connections:write` scope → save it as `SLACK_APP_TOKEN`.
 
-3. **Add a Slash Command** (Features → Slash Commands → Create New Command):
-   - Command: `/vesta`
-   - Request URL: _(leave blank — Socket Mode handles this)_
-   - Short Description: `Post a message to the Vestaboard`
-   - Usage Hint: `[your message]`
+3. **Add Slash Commands** (Features → Slash Commands → Create New Command). Add both:
+
+   | Command | Short Description | Usage Hint |
+   |---|---|---|
+   | `/vesta` | Post a message to the Vestaboard | `[your message]` |
+   | `/tides` | Post today's Cohasset tide chart to the Vestaboard | |
+
+   Leave Request URL blank for both — Socket Mode handles routing.
 
 4. **Set OAuth Scopes** (Features → OAuth & Permissions → Bot Token Scopes):
    - `commands`
@@ -46,12 +52,13 @@ A Slack app that lets anyone in your workspace post messages to a Vestaboard usi
    cp .env.example .env
    ```
 
-   | Variable | Where to find it |
-   |---|---|
-   | `SLACK_BOT_TOKEN` | OAuth & Permissions → Bot User OAuth Token (`xoxb-...`) |
-   | `SLACK_SIGNING_SECRET` | Basic Information → App Credentials → Signing Secret |
-   | `SLACK_APP_TOKEN` | Basic Information → App-Level Tokens (`xapp-...`) |
-   | `VESTABOARD_TOKEN` | Vestaboard app → Settings → Developer → Read/Write API token |
+   | Variable | Required | Where to find it |
+   |---|---|---|
+   | `SLACK_BOT_TOKEN` | Yes | OAuth & Permissions → Bot User OAuth Token (`xoxb-...`) |
+   | `SLACK_SIGNING_SECRET` | Yes | Basic Information → App Credentials → Signing Secret |
+   | `SLACK_APP_TOKEN` | Yes | Basic Information → App-Level Tokens (`xapp-...`) |
+   | `VESTABOARD_TOKEN` | Yes | Vestaboard app → Settings → Developer → Read/Write API token |
+   | `TIDE_STATION` | No | NOAA station ID for `/tides` (defaults to `8444762` — Cohasset Harbor) |
 
 ## Running
 
@@ -64,7 +71,8 @@ You should see:
 ⚡ Vestabot (Slack) is running!
 ```
 
-Use `/vesta Your message here` in any channel to post to the Vestaboard.
+- `/vesta Your message here` — posts text to the Vestaboard
+- `/tides` — fetches today's tide predictions from NOAA and posts a formatted chart to the Vestaboard
 
 ## Running in Docker
 
