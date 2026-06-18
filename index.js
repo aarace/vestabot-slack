@@ -126,7 +126,7 @@ function buildTideGrid(tides) {
   ];
 }
 
-// /tide slash command
+// /tides slash command
 app.command('/tides', async ({ command, ack, respond }) => {
   await ack();
 
