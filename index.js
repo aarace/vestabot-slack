@@ -77,6 +77,31 @@ function textRow(text, width = 22) {
   return codes;
 }
 
+function centeredTextRow(text, width = 22) {
+  const t = text.slice(0, width);
+  const pad = Math.max(0, Math.floor((width - t.length) / 2));
+  return textRow(t.padStart(t.length + pad).padEnd(width), width);
+}
+
+function ordinal(n) {
+  const s = ['TH', 'ST', 'ND', 'RD'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+function formatTodayDate() {
+  const DAYS   = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  const MONTHS = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE',
+                  'JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  const d = new Date();
+  const day   = DAYS[d.getDay()];
+  const month = MONTHS[d.getMonth()];
+  const date  = ordinal(d.getDate());
+  const full  = `${day} ${month} ${date}`;
+  // If too wide for a 22-char row, abbreviate the day name to 3 letters
+  return full.length <= 22 ? full : `${day.slice(0, 3)} ${month} ${date}`;
+}
+
 async function getTodayTides() {
   const today = new Date();
   const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
@@ -117,12 +142,12 @@ function buildTideGrid(tides) {
   }
 
   return [
-    textRow(' COHASSET TIDE CHARTS '),  // row 0
-    textRow('HIGH               LOW'),  // row 1
-    timeRow(highs[0], lows[0]),         // row 2
-    timeRow(highs[1], lows[1]),         // row 3
-    Array(22).fill(BLANK),              // row 4 blank
-    Array(22).fill(BLANK),              // row 5 blank
+    textRow(' COHASSET TIDE CHARTS '),       // row 0
+    centeredTextRow(formatTodayDate()),       // row 1 – e.g. "MONDAY JUNE 22ND"
+    textRow('HIGH               LOW'),        // row 2
+    timeRow(highs[0], lows[0]),              // row 3
+    timeRow(highs[1], lows[1]),              // row 4
+    Array(22).fill(BLANK),                   // row 5 blank
   ];
 }
 
